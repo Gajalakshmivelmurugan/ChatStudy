@@ -76,32 +76,36 @@ Client-server chat applications are foundational to real-time communication over
 ## program:
 ```
 client
+
 import socket
+from datetime import datetime
 s=socket.socket()
 s.bind(('localhost',8000))
 s.listen(5)
 c,addr=s.accept()
-while True:
- i=input("Enter a data: ")
- c.send(i.encode())
- ack=c.recv(1024).decode()
- if ack:
-  print(ack)
-  continue
- else:
-  c.close()
-  break
+print("Client Address : ",addr)
+now = datetime.now()
+c.send(now.strftime("%d/%m/%Y %H:%M:%S").encode())
+ack=c.recv(1024).decode()
+if ack:
+ print(ack)
+c.close()
+
 server
+
 import socket
 s=socket.socket()
 s.connect(('localhost',8000))
-while True:
- print(s.recv(1024).decode())
- s.send("Acknowledgement Recived".encode())
+print(s.getsockname())
+print(s.recv(1024).decode())
+s.send("acknowledgement recived from the server".encode())
+
 ```
 ## output:
-![Screenshot 2024-10-01 102644](https://github.com/user-attachments/assets/c4a632be-69cd-4db3-a32a-1fb91d8321ad)
-![Screenshot 2024-10-01 102800](https://github.com/user-attachments/assets/a1d3238b-e3c9-4262-b047-3801c23ce543)
+
+![Screenshot 2024-10-01 212120](https://github.com/user-attachments/assets/849ee61e-2a31-4448-83a1-931be4761a15)
+
+![Screenshot 2024-10-01 212140](https://github.com/user-attachments/assets/269851d4-33c1-4fc3-8c65-ee0c98548890)
 
 
 ## Result:
